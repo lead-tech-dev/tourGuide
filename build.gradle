@@ -1,0 +1,105 @@
+allprojects {
+    apply plugin: 'idea'
+    idea {
+        module {
+            inheritOutputDirs = true
+        }
+    }
+
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.8")
+    }
+}
+
+subprojects {
+
+    task('hello').doLast {
+        println "I'm $project.name"
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: "jacoco"
+
+
+    apply from: "$rootProject.projectDir/dependencies.gradle"
+
+    group 'org.mjtech'
+    version '1.0'
+
+    java.sourceCompatibility = JavaVersion.VERSION_11
+
+    configurations {
+        compileOnly.extendsFrom annotationProcessor
+        testCompileOnly.extendsFrom annotationProcessor
+        testAnnotationProcessor.extendsFrom annotationProcessor
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    dependencies {
+        implementation libsDependencies.springWeb
+        testImplementation libsTest.springBootTest
+        testImplementation libsTest.jupiterApi
+        testImplementation libsTest.jupiterParams
+        testImplementation libsTest.jupiterEngine
+        testImplementation libsTest.mockitoInline
+        testImplementation libsTest.mockitoJupiter
+        annotationProcessor libs.lombok
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    test {
+        useJUnitPlatform() {
+            includeEngines 'junit-jupiter'
+        }
+
+    }
+
+
+    jacoco {
+        toolVersion = "0.8.4"
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+            csv.enabled false
+            html.destination file("${buildDir}/jacocoHtml")
+        }
+    }
+
+    test.finalizedBy jacocoTestReport
+    check.dependsOn jacocoTestCoverageVerification
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.5
+                }
+            }
+        }
+    }
+
+}

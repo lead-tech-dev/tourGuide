@@ -1,0 +1,5 @@
+rootProject.name = 'JavaPathENProject8'
+include 'TourGuide'
+include 'GpsUtils'
+include 'RewardCentral'
+include 'TripPricer'

@@ -1,0 +1,10 @@
+
+
+dependencies {
+
+    implementation libsDependencies.javamoney
+    implementation libsDependencies.jsoniter
+    implementation libsDependencies.validation
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+}
+
