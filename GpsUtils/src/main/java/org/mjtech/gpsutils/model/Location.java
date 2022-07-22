@@ -1,5 +1,9 @@
 package org.mjtech.gpsutils.model;
 
+/**
+ * The Location class implements a Location
+ * entity.
+ */
 public class Location {
   public final double longitude;
   public final double latitude;

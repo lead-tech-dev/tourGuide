@@ -1,10 +1,14 @@
 package org.mjtech.gpsutils;
 
+import java.util.Locale;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Locale;
-
+/**
+ * GpsUtilsApplication. Main application
+ * class.
+ *
+ */
 @SpringBootApplication
 public class GpsUtilsApplication {
   public static void main(String[] args) {

@@ -99,7 +99,7 @@ public class TestPerformance {
 		//LocationProxy gpsUtil = new LocationProxy();
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes
 
-		InternalTestHelper.setInternalUserNumber(1000);
+		InternalTestHelper.setInternalUserNumber(100);
 		UserRepository userRepository = new UserRepository();
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();

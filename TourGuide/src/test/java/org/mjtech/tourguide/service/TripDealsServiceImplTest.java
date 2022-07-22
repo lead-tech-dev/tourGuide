@@ -16,29 +16,31 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("TripDealsServiceImplTest")
 @DisplayName("TripDeals Service implement test logic")
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 class TripDealsServiceImplTest {
 
   @Autowired
   private TripDealsService tripDealsService;
 
   @Autowired
-  private RewardsService rewardsService;
-
-  @Autowired
   private UserService userService;
 
   @Test
   @DisplayName("getTripDeals should return user provider list for given user")
-  void getTripDeals_ShouldReturnUserProviderList_ForGivenUser() {
+  void getTripDeals_ShouldReturnUserProviderList_ForGivenUser() throws ExecutionException, InterruptedException {
     // GIVEN
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com", new UserPreferences(2, 7));
+    User user = new User(UUID.randomUUID(), "internalUser78", "000", "internalUser78@tourGuide.com", new UserPreferences(2, 7));
 
     // WHEN
-    List<Provider> providers = tripDealsService.getTripDeals(user);
+    List<Provider> providers = tripDealsService.getTripDeals(user).get();
     userService.tracker.stopTracking();
 
     // THEN

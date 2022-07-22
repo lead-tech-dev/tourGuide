@@ -1,12 +1,14 @@
-package org.mjtech.tourguide.model;
+package org.mjtech.tourguide.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mjtech.tourguide.model.Location;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * The Closest class implements a Closest
+ * model.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

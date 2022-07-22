@@ -1,81 +1,107 @@
 package org.mjtech.tourguide.web.service.impl;
 
+import java.util.List;
+import java.util.UUID;
 import org.mjtech.tourguide.dto.UserDto;
+import org.mjtech.tourguide.model.user.User;
 import org.mjtech.tourguide.model.user.UserPreferences;
 import org.mjtech.tourguide.repository.UserRepository;
-import org.mjtech.tourguide.tracker.Tracker;
-import org.mjtech.tourguide.web.service.UserService;
-import org.mjtech.tourguide.model.user.User;
 import org.mjtech.tourguide.web.exception.BadRequestException;
 import org.mjtech.tourguide.web.exception.NotFoundException;
+import org.mjtech.tourguide.web.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
-
+/**
+ * UserServiceImpl. class that implement
+ * user business logic
+ */
 @Service
 public class UserServiceImpl implements UserService {
-	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+  private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-	@Autowired
-	private  UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
 
-	public User getUser(String userName) {
+  /**
+   * {@inheritDoc}
+   */
+  public User getUser(String userName) {
 
-		if (!userRepository.checkExistUser(userName)) {
-			throw new NotFoundException("User doesn't exist");
-		}
-		return userRepository.findByUsername(userName);
-	}
+    if (!userRepository.checkExistUser(userName)) {
 
-	public User getUserById(UUID userId) {
-		return userRepository.findById(userId);
-	}
+      logger.error("NotFoundException: User doesn't exist");
 
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
-	}
+      throw new NotFoundException("User doesn't exist");
+    }
+    return userRepository.findByUsername(userName);
+  }
 
-	@Override
-	public User addUser(UserDto userDto) {
+  /**
+   * {@inheritDoc}
+   */
+  public User getUserById(UUID userId) {
+    return userRepository.findById(userId);
+  }
 
-		if (userRepository.checkExistUser(userDto.getUsername())) {
-			throw new BadRequestException("User already exists");
-		}
+  /**
+   * {@inheritDoc}
+   */
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
+  }
 
-		User user = new User(
-						userDto.getUserId(),
-						userDto.getUsername(),
-						userDto.getPhoneNumber(),
-						userDto.getEmailAddress(),
-						new UserPreferences(userDto.getTripDuration(), userDto.getNumberOfChildren()));
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public User addUser(UserDto userDto) {
 
-		return userRepository.save(user);
-	}
+    if (userRepository.checkExistUser(userDto.getUsername())) {
+      logger.error("BadRequestException: User already exists");
+      throw new BadRequestException("User already exists");
+    }
 
-	@Override
-	public User updateUser(UserDto userDto) {
+    User user = new User(
+            userDto.getUserId(),
+            userDto.getUsername(),
+            userDto.getPhoneNumber(),
+            userDto.getEmailAddress(),
+            new UserPreferences(userDto.getTripDuration(),
+                    userDto.getNumberOfChildren()));
 
-		User user = getUser(userDto.getUsername());
+    return userRepository.save(user);
+  }
 
-		user.setEmailAddress(userDto.getEmailAddress());
-		user.setPhoneNumber(userDto.getPhoneNumber());
-		user.setUserPreferences(new UserPreferences(userDto.getTripDuration(), userDto.getNumberOfChildren()));
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public User updateUser(UserDto userDto) {
 
-		return userRepository.save(user);
-	}
+    User user = getUser(userDto.getUsername());
 
-	@Override
-	public void deleteUser(UserDto userDto) {
+    user.setEmailAddress(userDto.getEmailAddress());
+    user.setPhoneNumber(userDto.getPhoneNumber());
+    user.setUserPreferences(new UserPreferences(userDto.getTripDuration(),
+            userDto.getNumberOfChildren()));
 
-		User user = getUser(userDto.getUsername());
+    return userRepository.save(user);
+  }
 
-		userRepository.remove(user);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void deleteUser(UserDto userDto) {
 
-	}
+    User user = getUser(userDto.getUsername());
+
+    userRepository.remove(user);
+
+  }
 
 }

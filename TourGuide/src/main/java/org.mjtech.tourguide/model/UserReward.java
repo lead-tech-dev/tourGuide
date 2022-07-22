@@ -2,6 +2,10 @@ package org.mjtech.tourguide.model;
 
 import lombok.NoArgsConstructor;
 
+/**
+ * The UserReward class implements a UserReward
+ * entity.
+ */
 @NoArgsConstructor
 public class UserReward {
   private int rewardPoints;

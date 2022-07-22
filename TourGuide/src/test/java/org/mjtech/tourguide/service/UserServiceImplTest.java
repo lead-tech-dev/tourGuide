@@ -45,7 +45,7 @@ class UserServiceImplTest {
   @DisplayName("getUser should return user for given username")
   void getUser_ShouldReturnUser_ForGivenUsername() {
     // GIVEN
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com", new UserPreferences(2, 7));
+    User user = new User(UUID.randomUUID(), "jonathan", "000", "jonathan@tourGuide.com", new UserPreferences(2, 7));
     userService.addUser(ConvertTo.convertToUserDto(user));
 
     // WHEN

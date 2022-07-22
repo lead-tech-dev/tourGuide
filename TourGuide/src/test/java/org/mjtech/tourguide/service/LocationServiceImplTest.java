@@ -8,23 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mjtech.tourguide.helper.InternalTestHelper;
 import org.mjtech.tourguide.model.Attraction;
-import org.mjtech.tourguide.model.Closest;
+import org.mjtech.tourguide.dto.Closest;
 import org.mjtech.tourguide.model.VisitedLocation;
 import org.mjtech.tourguide.model.user.User;
 import org.mjtech.tourguide.model.user.UserPreferences;
-import org.mjtech.tourguide.repository.LocationRepository;
-import org.mjtech.tourguide.repository.RewardsRepository;
-import org.mjtech.tourguide.repository.UserRepository;
 import org.mjtech.tourguide.utility.ConvertTo;
 import org.mjtech.tourguide.web.service.LocationService;
 import org.mjtech.tourguide.web.service.UserService;
-import org.mjtech.tourguide.web.service.impl.LocationServiceImpl;
-import org.mjtech.tourguide.web.service.impl.RewardsServiceImpl;
-import org.mjtech.tourguide.web.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Map;
@@ -68,7 +61,6 @@ class LocationServiceImplTest {
           InterruptedException {
     // GIVEN
     InternalTestHelper.setInternalUserNumber(0);
-   // UserServiceImpl userService = new UserServiceImpl();
     User user = userService.addUser(ConvertTo.convertToUserDto(new User(
             UUID.randomUUID(),
             "eric",
@@ -77,10 +69,10 @@ class LocationServiceImplTest {
             new UserPreferences(2, 5))));
 
 
-    CompletableFuture<VisitedLocation> visitedLocation = locationService.trackUserLocation(user);
+    VisitedLocation visitedLocation = locationService.trackUserLocation(user).get();
 
     // WHEN
-    List<Closest> attractions = locationService.getNearByAttractions(visitedLocation.get());
+    List<Closest> attractions = locationService.getNearByAttractions(visitedLocation);
     userService.tracker.stopTracking();
 
     // THEN
@@ -94,9 +86,9 @@ class LocationServiceImplTest {
     UUID userId = UUID.randomUUID();
     User user = userService.addUser(ConvertTo.convertToUserDto(new User(
             userId,
-            "jon",
+            "alex",
             "000",
-            "jon@tourGuide.com",
+            "alex@tourGuide.com",
             new UserPreferences(2, 5))));
 
     locationService.trackUserLocation(user).get();

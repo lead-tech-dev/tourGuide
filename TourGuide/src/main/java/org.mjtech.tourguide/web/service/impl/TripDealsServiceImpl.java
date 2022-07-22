@@ -1,14 +1,19 @@
 package org.mjtech.tourguide.web.service.impl;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.mjtech.tourguide.model.Provider;
 import org.mjtech.tourguide.model.user.User;
 import org.mjtech.tourguide.repository.TripDealsRepository;
 import org.mjtech.tourguide.web.service.TripDealsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+/**
+ * TripDealsServiceImpl. class that implement
+ * tripDeals business logic
+ */
 @Service
 public class TripDealsServiceImpl implements TripDealsService {
 
@@ -17,13 +22,23 @@ public class TripDealsServiceImpl implements TripDealsService {
 
   private static final String tripPricerApiKey = "test-server-api-key";
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public List<Provider> getTripDeals(User user) {
-    int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
-    List<Provider> providers = tripDealsProxy.getPrice(tripPricerApiKey, user.getUserId(), user.getUserPreferences().getNumberOfAdults(),
-            user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(), cumulatativeRewardPoints);
+  @Async
+  public CompletableFuture<List<Provider>> getTripDeals(User user) {
+    System.out.println(user.getUserId());
+    int cumulatativeRewardPoints = user.getUserRewards()
+            .stream()
+            .mapToInt(i -> i.getRewardPoints()).sum();
+    System.out.println(cumulatativeRewardPoints);
+    List<Provider> providers = tripDealsProxy.getPrice(tripPricerApiKey, user.getUserId(),
+            user.getUserPreferences().getNumberOfAdults(),
+            user.getUserPreferences().getNumberOfChildren(),
+            user.getUserPreferences().getTripDuration(),
+            cumulatativeRewardPoints);
     user.setTripDeals(providers);
-    return providers;
+    return CompletableFuture.completedFuture(providers);
   }
 }

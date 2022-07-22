@@ -1,18 +1,17 @@
 package org.mjtech.tourguide.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.mjtech.tourguide.model.VisitedLocation;
-import org.mjtech.tourguide.model.user.UserPreferences;
-
+import java.util.UUID;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.List;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * The UserDto class implements a variation of user
+ * entity.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,13 +37,20 @@ public class UserDto {
 
   @Override
   public String toString() {
-    return "User{" +
-            "userId=" + userId +
-            ", username='" + username + '\'' +
-            ", phoneNumber='" + phoneNumber + '\'' +
-            ", emailAddress='" + emailAddress + '\'' +
-            ", tripDuration=" + tripDuration +
-            ", numberOfChildren=" + numberOfChildren +
+    return "User{"
+            +
+            "userId=" + userId
+            +
+            ", username='" + username + '\''
+            +
+            ", phoneNumber='" + phoneNumber + '\''
+            +
+            ", emailAddress='" + emailAddress + '\''
+            +
+            ", tripDuration=" + tripDuration
+            +
+            ", numberOfChildren=" + numberOfChildren
+            +
             '}';
   }
 }
